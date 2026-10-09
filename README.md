@@ -9,6 +9,42 @@ Este projeto permite criar um chatbot inteligente para WhatsApp utilizando RAG (
 
 ---
 
+## 🔑 Chaves de API e Credenciais do Projeto
+
+Todas as chaves podem ser configuradas no arquivo `.env` (copiado a partir do `.env.example`). Abaixo está o detalhamento de cada uma das chaves utilizadas:
+
+| Variável / Chave | Serviço | Finalidade | Status | Onde Configurar |
+| :--- | :--- | :--- | :--- | :--- |
+| **`GEMINI_API_KEY`** | Google Gemini (AI Studio) | Modelo de Chat e Inteligência Artificial (LLM). Modelo recomendado: `models/gemini-3-flash-preview`. | **Obrigatória** (Padrão) | Arquivo `.env` e Credencial no n8n |
+| **`EVOLUTION_API_KEY`** | Evolution API | Autenticação global da Evolution API para criação de instâncias, QR Code e envio de mensagens WhatsApp. | **Obrigatória** (WhatsApp) | Arquivo `.env`, `docker-compose.yml` e Header no n8n |
+| **`N8N_ENCRYPTION_KEY`** | n8n | Chave criptográfica interna para cifrar credenciais salvas no n8n e evitar perda de senhas ao recriar containers. | **Obrigatória** (Interna) | Arquivo `.env` e `docker-compose.yml` |
+| **`QDRANT_API_KEY`** | Qdrant | Chave de autenticação do banco de dados vetorial para a base de conhecimento RAG. | **Opcional** (Localhost) | Arquivo `.env` e Credencial no n8n |
+| **`OPENAI_API_KEY`** | OpenAI | Alternativa caso prefira utilizar modelos OpenAI (GPT-4o / Text Embeddings) no lugar do Gemini. | **Opcional** (Alternativa) | Arquivo `.env` e Credencial no n8n |
+| **`WHATSAPP_TOKEN`** | Meta / WhatsApp Cloud | Token de acesso da Meta caso deseje usar a API Oficial do WhatsApp Cloud em vez da Evolution API. | **Opcional** (Meta Oficial) | Arquivo `.env` |
+| **`WHATSAPP_PHONE_NUMBER_ID`** | Meta / WhatsApp Cloud | ID do número de telefone registrado no painel da Meta for Developers. | **Opcional** (Meta Oficial) | Arquivo `.env` |
+| **`WHATSAPP_VERIFY_TOKEN`** | Meta / WhatsApp Cloud | Token secreto para validação do webhook oficial da Meta (ex: `meu_token_secreto_whatsapp_rag`). | **Opcional** (Meta Oficial) | Arquivo `.env` |
+
+### Detalhes de Cada Chave
+
+#### 1. `GEMINI_API_KEY` (Google Gemini)
+* **Como obter:** Obtenha gratuitamente em [Google AI Studio](https://aistudio.google.com/app/apikey).
+* **Uso:** Alimenta o nó **Google Gemini Chat Model** no n8n.
+* **Modelo utilizado:** Utilize **`models/gemini-3-flash-preview`** para garantir respostas instantâneas e fugir dos bloqueios de cota (429) do plano gratuito.
+
+#### 2. `EVOLUTION_API_KEY` (Evolution API)
+* **Valor padrão do projeto:** `B42964AA252642248176A496FB14DF2A`
+* **Uso:** Utilizada nos scripts PowerShell (`connect-evolution.ps1`, `test-evolution-webhook.ps1`) e no nó HTTP do n8n **"Send WhatsApp via Evolution"** (cabeçalho `apikey`).
+
+#### 3. `N8N_ENCRYPTION_KEY` (n8n)
+* **Valor padrão do projeto:** `c4f78e2289139ba8b991de2f4001b636`
+* **Uso:** Chave estática fixa para garantir que o n8n consiga descriptografar suas credenciais cadastradas mesmo se você reiniciar ou recriar os containers Docker.
+
+#### 4. `QDRANT_API_KEY` (Qdrant)
+* **Valor padrão:** Deixada em branco por padrão para facilitar o uso no ambiente local (comunicação direta dentro da rede Docker `whatsapp-rag-net`).
+* **Uso:** Necessária apenas se você publicar o Qdrant em um servidor externo protegido por senha.
+
+---
+
 ## 🚀 Passo a Passo Definitivo para Inicializar o Projeto
 
 ### Passo 1: Subir a infraestrutura via Docker

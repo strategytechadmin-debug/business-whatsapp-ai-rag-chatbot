@@ -1,0 +1,15 @@
+# Environment variables
+#.env
+
+# n8n local data (if ever created in root)
+#.n8n/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

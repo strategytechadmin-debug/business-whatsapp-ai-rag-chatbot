@@ -1,0 +1,150 @@
+services:
+  # ==========================================================
+  # REDIS: Cache e controle de sessões para Evolution API
+  # ==========================================================
+  redis:
+    image: redis:7-alpine
+    container_name: whatsapp-rag-redis
+    restart: unless-stopped
+    networks:
+      - whatsapp-rag-net
+
+  # ==========================================================
+  # POSTGRESQL: Banco de dados para Evolution API
+  # ==========================================================
+  postgres:
+    image: postgres:15-alpine
+    container_name: whatsapp-rag-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=evolution
+      - POSTGRES_PASSWORD=evolution_secret
+      - POSTGRES_DB=evolution
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - whatsapp-rag-net
+
+  # ==========================================================
+  # EVOLUTION API: WhatsApp API Open-Source (Baileys / QR Code)
+  # ==========================================================
+  evolution-api:
+    image: evoapicloud/evolution-api:latest
+    container_name: whatsapp-rag-evolution
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "${EVOLUTION_PORT:-8081}:8080"
+    environment:
+      - SERVER_TYPE=http
+      - SERVER_PORT=8080
+      - SERVER_URL=http://localhost:${EVOLUTION_PORT:-8081}
+      - AUTHENTICATION_API_KEY=${EVOLUTION_API_KEY:-B42964AA252642248176A496FB14DF2A}
+      - AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES=true
+      - DATABASE_ENABLED=true
+      - DATABASE_PROVIDER=postgresql
+      - DATABASE_CONNECTION_URI=postgresql://evolution:evolution_secret@postgres:5432/evolution
+      - DATABASE_SAVE_DATA_INSTANCE=true
+      - DATABASE_SAVE_DATA_NEW_MESSAGE=true
+      - DATABASE_SAVE_MESSAGE_UPDATE=true
+      - DATABASE_SAVE_DATA_CONTACTS=true
+      - DATABASE_SAVE_DATA_CHATS=true
+      - CACHE_REDIS_ENABLED=true
+      - CACHE_REDIS_URI=redis://redis:6379/1
+      - CACHE_REDIS_PREFIX_KEY=evolution
+      - CONFIG_SESSION_PHONE_CLIENT=Ubuntu
+      - CONFIG_SESSION_PHONE_NAME=Chrome
+      - QRCODE_LIMIT=30
+      - QRCODE_COLOR=#198754
+      - LOG_LEVEL=ERROR,WARN,INFO
+      - CORS_ORIGIN=*
+      - CORS_CREDENTIALS=true
+      - DEL_INSTANCE=false
+    volumes:
+      - evolution_instances:/evolution/instances
+    networks:
+      - whatsapp-rag-net
+
+  # ==========================================================
+  # QDRANT: Vector Database para RAG
+  # ==========================================================
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: whatsapp-rag-qdrant
+    restart: unless-stopped
+    ports:
+      - "${QDRANT_PORT:-6333}:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__API_KEY=${QDRANT_API_KEY:-}
+    networks:
+      - whatsapp-rag-net
+
+  # ==========================================================
+  # N8N: Orquestrador de Workflows, LangChain & Webhooks
+  # ==========================================================
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    container_name: whatsapp-rag-n8n
+    restart: unless-stopped
+    depends_on:
+      - qdrant
+    ports:
+      - "${N8N_PORT:-5678}:5678"
+    environment:
+      - N8N_PORT=5678
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY:-c4f78e2289139ba8b991de2f4001b636}
+      - WEBHOOK_URL=${WEBHOOK_URL:-http://localhost:5678/}
+      - N8N_EDITOR_BASE_URL=${WEBHOOK_URL:-http://localhost:5678/}
+      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE:-America/Sao_Paulo}
+      - TZ=${TZ:-America/Sao_Paulo}
+      - N8N_DEFAULT_BINARY_DATA_MODE=filesystem
+      - NODE_FUNCTION_ALLOW_BUILTIN=*
+      - NODE_FUNCTION_ALLOW_EXTERNAL=*
+      - N8N_SECURE_COOKIE=false
+      - N8N_METRICS=false
+      - N8N_BLOCK_ENV_ACCESS_IN_NODE=false
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - EVOLUTION_API_KEY=${EVOLUTION_API_KEY:-B42964AA252642248176A496FB14DF2A}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - WHATSAPP_PHONE_NUMBER_ID=${WHATSAPP_PHONE_NUMBER_ID:-}
+      - WHATSAPP_TOKEN=${WHATSAPP_TOKEN:-}
+      - WHATSAPP_VERIFY_TOKEN=${WHATSAPP_VERIFY_TOKEN:-}
+      - N8N_RESTRICT_FILE_ACCESS_TO=/data;/home/node/.n8n
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./knowledge-base:/data/knowledge-base:ro
+    networks:
+      - whatsapp-rag-net
+
+  # ==========================================================
+  # CLOUDFLARE TUNNEL (OPCIONAL - PROFILE: tunnel)
+  # ==========================================================
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: whatsapp-rag-tunnel
+    restart: unless-stopped
+    profiles:
+      - tunnel
+    command: tunnel --no-autoupdate --url http://n8n:5678
+    networks:
+      - whatsapp-rag-net
+
+networks:
+  whatsapp-rag-net:
+    name: whatsapp-rag-net
+    driver: bridge
+
+volumes:
+  n8n_data:
+    name: whatsapp_rag_n8n_data
+  qdrant_storage:
+    name: whatsapp_rag_qdrant_storage
+  postgres_data:
+    name: whatsapp_rag_postgres_data
+  evolution_instances:
+    name: whatsapp_rag_evolution_instances

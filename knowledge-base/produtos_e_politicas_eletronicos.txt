@@ -1,0 +1,68 @@
+# BASE DE CONHECIMENTO - LOJA TECHZONE ELETRÔNICOS
+
+## 1. POLÍTICA GERAL DA LOJA E ATENDIMENTO
+- **Horário de Atendimento Humano**: Segunda a Sexta, das 09:00 às 18:00 (Horário de Brasília).
+- **Canais Oficiais**:
+  - E-mail de Suporte: suporte@techzone.com.br
+  - Portal de Autoatendimento e Trocas: https://techzone.com.br/devolucoes
+  - Telefone de Contato: (11) 4002-8922
+- **Política de Trocas e Devoluções**:
+  - Prazo de Arrependimento: Até 7 dias corridos após o recebimento (conforme Código de Defesa do Consumidor). O produto deve estar na embalagem original, sem marcas de uso e com todos os acessórios.
+  - Defeito de Fabricação: Troca direta em até 30 dias com a TechZone. Após 30 dias e até 1 ano, a garantia é prestada diretamente pela assistência técnica autorizada do fabricante.
+  - Para iniciar uma devolução ou troca: Acesse o portal `https://techzone.com.br/devolucoes`, informe o CPF e o número do pedido. Uma etiqueta de postagem reversa dos Correios será gerada em até 24 horas úteis.
+
+---
+
+## 2. CATÁLOGO DE PRODUTOS PRINCIPAIS
+
+### 2.1 Smartwatch TechZone XYZ vs Smartwatch TechZone ABC
+- **Smartwatch XYZ (Foco em Bateria e Esportes)**:
+  - Bateria: Duração de até 7 dias com uso contínuo, até 14 dias em modo econômico.
+  - Tela: 1.43" AMOLED de 466x466 pixels.
+  - Recursos: GPS integrado de alta precisão (GLONASS e Galileo), monitoramento cardíaco 24h, oxímetro (SpO2), monitor de sono avançado, resistência à água 5 ATM (até 50 metros).
+  - Conectividade: Bluetooth 5.3, compatível com Android 8.0+ e iOS 13+.
+  - Preço: R$ 599,00 à vista ou 10x de R$ 65,90.
+  
+- **Smartwatch ABC (Foco em Estilo e Praticidade)**:
+  - Bateria: Duração de até 48 horas.
+  - Tela: 1.78" Super Retina AMOLED de alta densidade com brilho de até 1000 nits.
+  - Carregamento: Sem fio por indução magnética Qi (inclui base).
+  - Recursos: Faz e atende chamadas via Bluetooth (microfone e alto-falante embutidos), assistente de voz Alexa integrada, NFC para pagamentos por aproximação, resistência IP68.
+  - Conectividade: Bluetooth 5.2, compatível com iOS e Android.
+  - Preço: R$ 749,00 à vista ou 10x de R$ 79,90.
+
+### 2.2 Roteador Wi-Fi 6 Mesh Gigabit Archer AX50
+- Velocidade: Até 3000 Mbps (2402 Mbps em 5 GHz + 574 Mbps em 2.4 GHz).
+- Cobertura: Até 200 m² por unidade; expansível com tecnologia EasyMesh.
+- Conexões: 1 Porta WAN Gigabit + 4 Portas LAN Gigabit + 1 Porta USB 3.0 para compartilhamento de arquivos.
+- Capacidade: Suporta até 120 dispositivos conectados simultaneamente com tecnologia OFDMA e MU-MIMO.
+- Preço: R$ 429,00 à vista.
+
+### 2.3 Fone de Ouvido Bluetooth TWS Pro Sound Anc
+- Cancelamento Ativo de Ruído (ANC) híbrido de até 35 dB.
+- Autonomia: 8 horas nos fones + 24 horas no estojo de recarga (total de 32 horas).
+- Carregamento rápido: 10 minutos de carga garantem 2 horas de reprodução via USB-C.
+- Proteção contra suor e respingos: IPX5.
+- Preço: R$ 289,00 à vista.
+
+---
+
+## 3. GUIA DE SUPORTE TÉCNICO E RESOLUÇÃO DE PROBLEMAS (TROUBLESHOOTING)
+
+### 3.1 Roteador sem Acesso à Internet ou Luz Vermelha Piscando:
+1. **Passo 1 (Ciclo de Energia)**: Desligue o roteador e o modem da tomada por 30 segundos. Ligue primeiro o modem da operadora, aguarde todas as luzes estabilizarem (cerca de 2 minutos) e depois ligue o roteador.
+2. **Passo 2 (Cabos)**: Verifique se o cabo de rede Ethernet (RJ-45) está conectado firmemente entre a porta LAN do modem e a porta WAN (azul ou destacada) do roteador.
+3. **Passo 3 (Verificação de LEDs)**: 
+   - Luz de Internet (Globo) Verde/Azul sólida: Conexão normal.
+   - Luz Laranja/Vermelha: Sem sinal de rede ou problema de autenticação PPPoE/DHCP.
+4. **Passo 4 (Reset de Fábrica)**: Se o problema persistir, mantenha pressionado o botão RESET na traseira do aparelho com um clipe por 10 segundos até todos os LEDs piscarem simultaneamente. Depois, acesse `192.168.0.1` pelo navegador para reconfigurar.
+
+### 3.2 Smartwatch não Emparelha ou Desconecta Frequentemente:
+1. Certifique-se de que o Bluetooth do celular está ativado e que o aplicativo oficial (TechFit App) possui permissão de localização e execução em segundo plano.
+2. No menu do relógio, vá em `Configurações > Sistema > Reiniciar`.
+3. Se necessário, desemparelhe o dispositivo nas configurações de Bluetooth do celular e faça um novo pareamento diretamente de dentro do aplicativo TechFit, nunca apenas pelo menu de Bluetooth do sistema.
+
+### 3.3 Fone de Ouvido TWS com apenas um lado funcionando:
+1. Coloque ambos os fones no estojo de carregamento e verifique se as luzes indicadoras de carga acendem.
+2. Com os fones no estojo, segure o botão do estojo por 15 segundos até o LED piscar em vermelho e branco (Reset de sincronização dos fones).
+3. Retire os dois fones juntos do estojo e refaça a conexão no celular.
